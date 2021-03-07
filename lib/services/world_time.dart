@@ -12,19 +12,25 @@ class WorldTime {
 
   void getTime() async {
 
-    //  Make the request
-    Response response = await get("http://worldtimeapi.org/api/timezone/$url");
-    Map data = jsonDecode(response.body);
+    try {
+      //  Make the request
+      Response response = await get("http://worldtimeapi.org/api/timezone/$url");
+      Map data = jsonDecode(response.body);
 
-    //  Get properties from data
-    String dateTime = data['datetime'];
-    String offset = data['utc_offset'].substring(1,3);
+      //  Get properties from data
+      String dateTime = data['datetime'];
+      String offset = data['utc_offset'].substring(1,3);
 
-    //  Create DateTime object
-    DateTime now = DateTime.parse(dateTime);
-    now = now.add(Duration(hours: int.parse(offset)));
+      //  Create DateTime object
+      DateTime now = DateTime.parse(dateTime);
+      now = now.add(Duration(hours: int.parse(offset)));
 
-    //  Set the time property
-    time = now.toString();
+      //  Set the time property
+      time = now.toString();
+
+    } catch(e) {
+      print('Caught an error : $e');
+      time = 'Couldn\'t get time data';
+    }
   }
 }
